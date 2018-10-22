@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.spring.springboot.dao.cluster.OrderItemRepository">
+    <resultMap id="baseResultMap" type="org.spring.springboot.domain.OrderItem">
+        <result column="order_item_id" property="orderItemId" jdbcType="VARCHAR" />
+        <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <update id="createIfNotExistsTable">
+        CREATE TABLE IF NOT EXISTS t_order_item (order_item_id BIGINT AUTO_INCREMENT, order_id BIGINT, user_id INT NOT NULL, PRIMARY KEY (order_item_id));
+    </update>
+    
+    <update id="truncateTable">
+        TRUNCATE TABLE t_order_item;
+    </update>
+    
+    <update id="dropTable">
+        DROP TABLE IF EXISTS t_order_item;
+    </update>
+    
+    <insert id="insert">
+        INSERT INTO t_order_item (
+          order_item_id,order_id, user_id
+        )
+        VALUES (
+        #{orderItemId,jdbcType=VARCHAR},
+        #{orderId,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR}
+        )
+    </insert>
+    
+    <delete id="delete">
+        DELETE FROM t_order_item WHERE order_id = #{orderId,jdbcType=VARCHAR}
+    </delete>
+    
+    <select id="selectAll" resultMap="baseResultMap">
+        SELECT
+        i.*
+        FROM
+        t_order o, t_order_item i
+        WHERE
+        o.order_id = i.order_id
+    </select>
+
+    <select id="pagingTest" resultMap="baseResultMap">
+        SELECT * FROM t_order_item ORDER BY order_id LIMIT #{start}, #{end}
+    </select>
+
+    <select id="selectAllUserCount" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            (
+                SELECT
+                    *
+                FROM
+                    user o
+                WHERE
+                    o.user_id IN (
+                        SELECT
+                            user_id
+                        FROM
+                            user
+                    )
+            ) AS u
+    </select>
+</mapper>
