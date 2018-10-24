@@ -319,7 +319,7 @@ cluster.datasource.driverClassName=com.mysql.jdbc.Driver
 
 ## 五、sharding-jdbc-mutil-datasource使用说明
 ### 1.普通数据源接口
-http://localhost:8001/api/user  数据查询接口，SQL采用sharding-jdbc不支持的多子查询
+http://localhost:8001/api/user  数据查询接口，SQL采用sharding-jdbc不支持的多子查询  
 http://localhost:8001/api/addUser 插入数据接口 主要用来测试事务有效性
 
 ### 2.sharding数据源接口
