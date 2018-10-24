@@ -1,5 +1,5 @@
 # JDBC数据源和Sharding-JDBC数据源的多数据源配置文档   
-##一、引入shardingsphere maven依赖  
+## 一、引入shardingsphere maven依赖  
 ```$xslt
         <dependency>
             <groupId>io.shardingsphere</groupId>
@@ -14,9 +14,9 @@
         </dependency>
 ```
  	
-##二、配置普通数据源和Sharding-JDBC数据源
+## 二、配置普通数据源和Sharding-JDBC数据源
 同时配置普通数据源和sharding数据源的目的是在使用sharding-JDBC改造项目时可以分模块逐步改造，已改造完成的模块使用sharding数据源，未改造的模块使用普通JDBC数据源  
-###1.配置主数据源（普通数据源）
+### 1.配置主数据源（普通数据源）
 ```$xslt
 @Configuration
 // 扫描 Mapper 接口并容器管理
@@ -73,7 +73,7 @@ public class MasterDataSourceConfig {
 - @Primary //该注解表示在同一个接口有多个实现类可以注入的时候，默认选择哪一个，而不是让autowire注解报错，官网要求当多个数据源时，必须指定一个datasource，另一个datasource则不用添加。
 - @Qualifier 根据名称进行注入，通常是在具有相同的多个类型的实例的一个注入（例如有多个DataSource类型的实例）。
 - @MapperScan(basePackages =MasterDataSourceConfig.PACKAGE, sqlSessionTemplateRef = masterSqlSessionFactory)  basePackages为mapper所在的包，sqlSessionTemplateRef要引用的实例。
-###2.配置采用shardingsphere的分片数据源
+### 2.配置采用shardingsphere的分片数据源
 ```$xslt
 @Configuration
 // 扫描 Mapper 接口并容器管理
