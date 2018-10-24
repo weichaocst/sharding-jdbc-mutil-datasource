@@ -70,10 +70,10 @@ public class MasterDataSourceConfig {
 ```  
 
 普通数据源作为master数据源，配置master数据源的作用范围，然后配置master数据源事务和SqlSessionFactory   
-- @Primary //该注解表示在同一个接口有多个实现类可以注入的时候，默认选择哪一个，而不是让autowire注解报错，官网要求当多个数据源时，必须指定一个datasource，另一个datasource则不用添加。
+- @Primary 该注解表示在同一个接口有多个实现类可以注入的时候，默认选择哪一个，而不是让autowire注解报错，官网要求当多个数据源时，必须指定一个datasource，另一个datasource则不用添加。
 - @Qualifier 根据名称进行注入，通常是在具有相同的多个类型的实例的一个注入（例如有多个DataSource类型的实例）。
 - @MapperScan(basePackages =MasterDataSourceConfig.PACKAGE, sqlSessionTemplateRef = masterSqlSessionFactory)  basePackages为mapper所在的包，sqlSessionTemplateRef要引用的实例。
-### 2.配置采用shardingsphere的分片数据源
+### 2.配置采用shardingsphere的数据源并配置表分片策略
 ```$xslt
 @Configuration
 // 扫描 Mapper 接口并容器管理
@@ -162,7 +162,7 @@ public class ShardingDataSourceConfig {
 - 注：在多数据源环境下，使用master数据源可以不指定事务，直接在service上加@Transactional(rollbackFor = Exception.class)即可，  使用从数据源（sharding数据源）时，要指定使用的事务名称
 @Transactional(transactionManager = "clusterTransactionManager",rollbackFor = Exception.class)
 
-## 三、配置分片策略
+## 三、实现自定义分片策略
 ```$xslt
 /**
  * @author weichao
