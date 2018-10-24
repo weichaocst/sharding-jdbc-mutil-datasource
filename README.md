@@ -1,4 +1,4 @@
-#Sharding-JDBC 接入文档  
+# Sharding-JDBC 接入文档  
 ##一、引入shardingsphere maven依赖  
 ```$xslt
         <dependency>
