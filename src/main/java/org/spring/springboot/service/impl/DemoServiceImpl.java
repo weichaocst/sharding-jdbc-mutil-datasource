@@ -107,6 +107,8 @@ public class DemoServiceImpl implements DemoService {
         }
         long endTime=System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
+        //获取所有数据
+        //System.out.println(orderItemRepository.selectAll());
     }
 
     /**

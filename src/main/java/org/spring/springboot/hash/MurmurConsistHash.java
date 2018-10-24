@@ -116,6 +116,4 @@ public class MurmurConsistHash<T> {
         buf.order(byteOrder);
         return h;
     }
-
-
 }
