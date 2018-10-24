@@ -24,7 +24,7 @@ import org.spring.springboot.domain.OrderItem;
 import java.util.List;
 
 @Mapper
-public interface OrderItemRepository {
+public interface OrderItemDao {
     
     void createIfNotExistsTable();
     

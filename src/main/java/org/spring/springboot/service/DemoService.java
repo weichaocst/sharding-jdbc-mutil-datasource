@@ -17,4 +17,5 @@ public interface DemoService{
 
     List<OrderItem> pageTest(int start , int end);
 
+    List<OrderItem> selectOrderItemByHint();
 }

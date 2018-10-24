@@ -21,7 +21,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.spring.springboot.domain.Order;
 
 @Mapper
-public interface OrderRepository {
+public interface OrderDao {
     
     void createIfNotExistsTable();
     

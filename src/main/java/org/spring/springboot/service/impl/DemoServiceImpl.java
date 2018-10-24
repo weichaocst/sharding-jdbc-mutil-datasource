@@ -17,13 +17,13 @@
 
 package org.spring.springboot.service.impl;
 
-import org.spring.springboot.dao.cluster.OrderItemRepository;
-import org.spring.springboot.dao.cluster.OrderRepository;
+import io.shardingsphere.api.HintManager;
+import org.spring.springboot.dao.cluster.OrderItemDao;
+import org.spring.springboot.dao.cluster.OrderDao;
 import org.spring.springboot.domain.Order;
 import org.spring.springboot.domain.OrderItem;
 import org.spring.springboot.service.DemoService;
 import org.spring.springboot.utils.UUIDGenerator;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +39,10 @@ import java.util.List;
 public class DemoServiceImpl implements DemoService {
     
     @Resource
-    private OrderRepository orderRepository;
+    private OrderDao orderRepository;
     
     @Resource
-    private OrderItemRepository orderItemRepository;
+    private OrderItemDao orderItemRepository;
     
     public void demo() {
         //DefaultKeyGeneratorTest defaultKeyGenerator =  new DefaultKeyGeneratorTest();
@@ -101,9 +101,9 @@ public class DemoServiceImpl implements DemoService {
             item.setUserId("123");
             item.setOrderItemId(UUIDGenerator.getUUID());
             orderItemRepository.insert(item);
-            if(i == 99){
+            /*if(i == 99){
                 throw new RuntimeException("事务测试");
-            }
+            }*/
         }
         long endTime=System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
@@ -121,6 +121,17 @@ public class DemoServiceImpl implements DemoService {
         //分页测试
         List<OrderItem> orderItems = orderItemRepository.pagingTest(start ,end);
         return orderItems;
+    }
+
+    @Override
+    public List<OrderItem> selectOrderItemByHint() {
+        try (HintManager hintManager = HintManager.getInstance()) {
+            hintManager.addTableShardingValue("t_order_item","283f714ad1ef46f5b68f7929b50552a6");
+            hintManager.setMasterRouteOnly();
+            return orderItemRepository.selectAll();
+        }
+
+
     }
 
 }

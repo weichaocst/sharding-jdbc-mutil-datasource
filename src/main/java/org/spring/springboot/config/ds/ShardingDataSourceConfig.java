@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -25,8 +24,8 @@ import java.util.Properties;
 
 @Configuration
 // 扫描 Mapper 接口并容器管理
-@MapperScan(basePackages = ClusterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "clusterSqlSessionFactory")
-public class ClusterDataSourceConfig {
+@MapperScan(basePackages = ShardingDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "clusterSqlSessionFactory")
+public class ShardingDataSourceConfig {
 
     // 精确到 cluster 目录，以便跟其他数据源隔离
     static final String PACKAGE = "org.spring.springboot.dao.cluster";
@@ -61,7 +60,10 @@ public class ClusterDataSourceConfig {
         shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());
         shardingRuleConfig.getTableRuleConfigs().add(getOrderItemTableRuleConfiguration());
         shardingRuleConfig.getBindingTableGroups().add("t_order, t_order_item");
-        return ShardingDataSourceFactory.createDataSource(createDataSourceMap(), shardingRuleConfig, new HashMap<String, Object>(), new Properties());
+        Properties properties = new Properties();
+        //打开真实SQL打印
+        properties.setProperty("sql.show","true");
+        return ShardingDataSourceFactory.createDataSource(createDataSourceMap(), shardingRuleConfig, new HashMap<String, Object>(), properties);
     }
 
     public TableRuleConfiguration getOrderTableRuleConfiguration() {
@@ -103,7 +105,7 @@ public class ClusterDataSourceConfig {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(clusterDataSource);
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
-                .getResources(ClusterDataSourceConfig.MAPPER_LOCATION));
+                .getResources(ShardingDataSourceConfig.MAPPER_LOCATION));
         return sessionFactory.getObject();
     }
 }
